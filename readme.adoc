@@ -1,0 +1,76 @@
+= Progopts
+
+List<Option> definedOptions;
+
+we form a lookup for char options and string options
+
+
+== How different shells process quotes
+
+In general, we don't need to care about quoting as all the shells we have tested give decent results - nothing is unexpected.
+
+The one consequence of shell-quoting rules is that if we want to process commands like
+
+----
+git commit -m"updated database"
+----
+
+then we need to allow an option parameter immediately after a short option.
+
+Consider the following C# `main` function:
+
+----
+private static void Main(string[] args)
+{
+    args.ToList().ForEach(Console.WriteLine);
+}
+----
+
+=== Powershell
+
+Single quotes must be matched
+
+----
+`printargs it's a cat`
+----
+
+will prompt for a continuation as powershell is expecting a closing single quote.
+
+----
+printargs it's a dog's dinner
+----
+
+actually has two arguments since - the single quotes are removed and the first argument becomes `its a dogs`.
+
+----
+printargs 'it''s a dog'
+----
+
+has a single argument since two single quotes can be used to insert a quote.
+
+----
+printargs "it''s a' dog"
+----
+
+has a single argument - the outer double-quotes are removed and the *all* the inner single quotes are kept.
+
+Both of the following give exactly the same result:
+
+----
+printargs -m'hello world'
+printargs -m"hello world"
+----
+
+Both the quotes are removed in both cases.
+
+----
+printargs -m"don't write to the database"
+----
+
+gives a single argument without the double-quotes but with the apostrophe.
+
+HINT: This is the same in bash and CMD.
+
+
+
+
