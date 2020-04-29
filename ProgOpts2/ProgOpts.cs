@@ -6,7 +6,7 @@ namespace ProgOpts2
 {
     public class ProgOpts
     {
-        private readonly OptionSpec[] _definedOptions;
+        private readonly OptionSpec[] _specifiedOptions;
 
         private readonly IDictionary<string, OptionSpec> _longOptions;
 
@@ -21,10 +21,12 @@ namespace ProgOpts2
         private HashSet<object> _allowedGroups;
         private List<(string name, int index, ErrorCodes errorCode)> _illegalOptions = new List<(string, int, ErrorCodes errorCode)>();
 
-        private PopList<string> _popList;
+        private List<(string arg, int index)> _nonOptions = new List<(string arg, int index)>();
+
+        private PopQueue<string> _popList;
         public ProgOpts(OptionSpec[] options)
         {
-            _definedOptions = options;
+            _specifiedOptions = options;
 
             var shortDups = options.GroupBy(x => x.ShortOption).Where(x => x.Count() > 1);
             var longDups = options.GroupBy(x => x.LongOption).Where(x => x.Count() > 1);
@@ -77,6 +79,7 @@ namespace ProgOpts2
         }
 
         public object[] AllowedGroups => _allowedGroups.ToArray();
+        public (string arg, int index)[] NonOptions => _nonOptions.ToArray();
 
         /// <summary>
         ///
@@ -166,7 +169,7 @@ namespace ProgOpts2
         /// <param name="allowedGroups">option groups to allow</param>
         public void ParseCommandLine(string[] args, int offset = 0, object[] allowedGroups = null)
         {
-            _popList = new PopList<string>(args, offset);
+            _popList = new PopQueue<string>(args, offset);
             _allowedGroups = allowedGroups == null ? new HashSet<object>() : new HashSet<object>(allowedGroups);
 
             while (!_popList.Empty)
@@ -193,7 +196,7 @@ namespace ProgOpts2
                     // this means stdin and we don't know what to do yet here
                     if (arg.Length == 1)
                     {
-                        throw new NotImplementedException("not implemented");
+                        _nonOptions.Add((arg, index));
                     }
                     else
                     {
@@ -204,7 +207,57 @@ namespace ProgOpts2
                         }
                     }
                 }
+                else
+                {
+                    _nonOptions.Add((arg, index));
+                }
             }
+        }
+
+        public bool TryGetList(string option, out string[] list, int offset = 0)
+        {
+            bool result = _longToInt.TryGetValue(option, out var optionIndex);
+            if (!result)
+            {
+                list = default;
+                return false;
+            }
+            result = _parsedOptions.TryGetValue(optionIndex, out var optionParam);
+            if (!result)
+            {
+                list = default;
+                return false;
+            }
+            if (optionParam[offset].Params is List<string> strList)
+            {
+                list = strList.ToArray();
+                return true;
+            }
+            list = default;
+            return false;
+        }
+
+        public bool TryGetValue(string option, out string value, int offset = 0)
+        {
+            bool result = _longToInt.TryGetValue(option, out var optionIndex);
+            if (!result)
+            {
+                value = default;
+                return false;
+            }
+            result = _parsedOptions.TryGetValue(optionIndex, out var optionParam);
+            if (!result)
+            {
+                value = default;
+                return false;
+            }
+            if (optionParam[offset].Params is string str)
+            {
+                value = str;
+                return true;
+            }
+            value = default;
+            return false;
         }
 
 
@@ -342,7 +395,7 @@ namespace ProgOpts2
         private void ConsumeOptionParameters(ParsedOption option)
         {
             object paramList;
-            var numberOfParams = _definedOptions[option.OptionIndex].NumberOfParams;
+            var numberOfParams = _specifiedOptions[option.OptionIndex].NumberOfParams;
             if (numberOfParams == 1)
             {
                 paramList = _popList.PopFront().item;

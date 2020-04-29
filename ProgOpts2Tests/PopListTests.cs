@@ -11,9 +11,9 @@ namespace ProgOpts2.Tests
         public void PopListTest()
         {
             var args = new[] { "the", "fat", "cat", "sat", "on", "the", "mat" };
-            var popList = new PopList<string>(args);
+            var popList = new PopQueue<string>(args);
             Assert.AreEqual(args.Length, popList.Count);
-            var popList2 = new PopList<string>(args, 2);
+            var popList2 = new PopQueue<string>(args, 2);
             Assert.AreEqual(args.Length - 2, popList2.Count);
         }
 
@@ -21,13 +21,13 @@ namespace ProgOpts2.Tests
         public void PopFrontTest()
         {
             var args = new[] { "the", "fat", "cat", "sat", "on", "the", "mat" };
-            var popList = new PopList<string>(args);
+            var popList = new PopQueue<string>(args);
             Assert.AreEqual(args.Length, popList.Count);
             var pop1 = popList.PopFront();
             var pop2 = popList.PopFront();
             Assert.AreEqual(("the", 0), pop1);
             Assert.AreEqual(("fat", 1), pop2);
-            var pop4 = new PopList<string>(args.Take(3).ToArray());
+            var pop4 = new PopQueue<string>(args.Take(3).ToArray());
             pop4.PopFront();
             pop4.PopFront();
             pop4.PopFront();
@@ -38,7 +38,7 @@ namespace ProgOpts2.Tests
         public void UndoTest()
         {
             var args = new[] { "the", "fat", "cat", "sat", "on", "the", "mat" };
-            var popList = new PopList<string>(args);
+            var popList = new PopQueue<string>(args);
             Assert.AreEqual(args.Length, popList.Count);
             var pop1 = popList.PopFront();
             var pop2 = popList.PopFront();
@@ -47,13 +47,13 @@ namespace ProgOpts2.Tests
             popList.Undo();
             var pop3 = popList.PopFront();
             Assert.AreEqual(("fat", 1), pop3);
-            var pop4 = new PopList<string>(args.Take(2).ToArray());
+            var pop4 = new PopQueue<string>(args.Take(2).ToArray());
             pop4.PopFront();
             pop4.PopFront();
             pop4.Undo();
             pop4.Undo();
             Assert.ThrowsException<InvalidOperationException>(() => pop4.Undo());
-            var pop5 = new PopList<string>(new string[] { });
+            var pop5 = new PopQueue<string>(new string[] { });
             Assert.ThrowsException<InvalidOperationException>(() => pop5.Undo());
         }
     }
