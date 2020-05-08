@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8924062F-2A39-453F-831F-3DC224354A7C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>$(ProjectDir)\buildnuget.ps1</PostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="buildnuget.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommandLineOptions\CommandLineOptions.csproj">
+      <Project>{ac58a810-eb34-4d73-a02b-6c1135562a80}</Project>
+      <Name>CommandLineOptions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProgOpts2Tests\CommandLineOptionsTests.csproj">
+      <Project>{f0b42a79-5457-434c-9190-3f374e9a5452}</Project>
+      <Name>CommandLineOptionsTests</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

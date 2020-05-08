@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace CommandLineOptions
 {
-    public class ProgOpts
+    public class Options
     {
         private readonly OptionSpec[] _specifiedOptions;
 
@@ -24,7 +24,7 @@ namespace CommandLineOptions
         private List<(string arg, int index)> _nonOptions = new List<(string arg, int index)>();
 
         private PopQueue<string> _popList;
-        public ProgOpts(OptionSpec[] options)
+        public Options(OptionSpec[] options)
         {
             _specifiedOptions = options;
 

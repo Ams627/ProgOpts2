@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace ProgOpts2
+namespace CommandLineOptions
 {
     internal class Program
     {

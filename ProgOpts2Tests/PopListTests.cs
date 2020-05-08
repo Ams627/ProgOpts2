@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace ProgOpts2.Tests
+namespace CommandLineOptions.Tests
 {
     [TestClass()]
     public class PopListTests

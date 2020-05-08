@@ -1,49 +1,50 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using FluentAssertions;
 using System;
+using System.Diagnostics;
+using System.Linq;
 
-namespace ProgOpts2.Tests
+namespace CommandLineOptions.Tests
 {
     [TestClass()]
-    public class ProgOptsTests
+    public class CommandLineOptionsTests
     {
-        private readonly ProgOpts.OptionSpec[] testOptions = new ProgOpts.OptionSpec[] {
-                    new ProgOpts.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
-                    new ProgOpts.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
-                    new ProgOpts.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1 },
+        private readonly Options.OptionSpec[] testOptions = new Options.OptionSpec[] {
+                    new Options.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
+                    new Options.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
+                    new Options.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1 },
                 };
 
         [TestMethod()]
-        public void ProgOptsTest()
+        public void OptionsTest()
         {
             var args = testOptions;
-            var opts = new ProgOpts(args);
+            var opts = new Options(args);
             // No exception
 
-            ProgOpts.OptionSpec[] dupOptions1 = new ProgOpts.OptionSpec[] {
-                    new ProgOpts.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
-                    new ProgOpts.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
+            Options.OptionSpec[] dupOptions1 = new Options.OptionSpec[] {
+                    new Options.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
+                    new Options.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
                     // duplicate i:
-                    new ProgOpts.OptionSpec { ShortOption = 'i', LongOption = "input", NumberOfParams = 1 },
-                    new ProgOpts.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1 },
+                    new Options.OptionSpec { ShortOption = 'i', LongOption = "input", NumberOfParams = 1 },
+                    new Options.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1 },
                 };
 
-            Assert.ThrowsException<ArgumentException>(() => new ProgOpts(dupOptions1));
+            Assert.ThrowsException<ArgumentException>(() => new Options(dupOptions1));
 
-            ProgOpts.OptionSpec[] dupOptions2 = new ProgOpts.OptionSpec[] {
-                    new ProgOpts.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
-                    new ProgOpts.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
-                    new ProgOpts.OptionSpec { ShortOption = 'j', LongOption = "ignorecase", NumberOfParams = 1 },
-                    new ProgOpts.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1 },
+            Options.OptionSpec[] dupOptions2 = new Options.OptionSpec[] {
+                    new Options.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
+                    new Options.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
+                    new Options.OptionSpec { ShortOption = 'j', LongOption = "ignorecase", NumberOfParams = 1 },
+                    new Options.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1 },
                 };
 
-            Assert.ThrowsException<ArgumentException>(() => new ProgOpts(dupOptions2));
+            Assert.ThrowsException<ArgumentException>(() => new Options(dupOptions2));
         }
 
         [TestMethod()]
         public void ParseOptionsTestNoSpaceSingleParam()
         {
-            var opts = new ProgOpts(testOptions);
+            var opts = new Options(testOptions);
             var args = new[] { "--all", "-i", "-frequest.xml" };
             opts.ParseCommandLine(args);
             Assert.IsTrue(opts.IsOptionPresent("ignorecase"));
@@ -61,7 +62,7 @@ namespace ProgOpts2.Tests
         [TestMethod()]
         public void ParseOptionsTestSpaceSingleDashParam()
         {
-            var opts = new ProgOpts(testOptions);
+            var opts = new Options(testOptions);
             var args = new[] { "--all", "-i", "-f", "request.xml" };
             opts.ParseCommandLine(args);
             Assert.IsTrue(opts.IsOptionPresent("ignorecase"));
@@ -81,7 +82,7 @@ namespace ProgOpts2.Tests
         [TestMethod()]
         public void ParseOptionsTestEqualsDoubleDashEqualsParam()
         {
-            var opts = new ProgOpts(testOptions);
+            var opts = new Options(testOptions);
             var args = new[] { "--all", "-i", "--file=request.xml" };
             opts.ParseCommandLine(args);
             Assert.IsTrue(opts.IsOptionPresent("ignorecase"));
@@ -104,7 +105,7 @@ namespace ProgOpts2.Tests
 
         public void ParseOptionsTestDoubleDashParam()
         {
-            var opts = new ProgOpts(testOptions);
+            var opts = new Options(testOptions);
             var args = new[] { "--all", "-i", "--file", "request.xml" };
             opts.ParseCommandLine(args);
             Assert.IsTrue(opts.IsOptionPresent("ignorecase"));
@@ -121,7 +122,7 @@ namespace ProgOpts2.Tests
         [TestMethod()]
         public void SingleConcatenated()
         {
-            var opts = new ProgOpts(testOptions);
+            var opts = new Options(testOptions);
             var args = new[] { "-ai" };
             opts.ParseCommandLine(args);
             Assert.IsTrue(opts.IsOptionPresent("ignorecase"));
@@ -135,7 +136,7 @@ namespace ProgOpts2.Tests
         [TestMethod()]
         public void NonOptions()
         {
-            var opts = new ProgOpts(testOptions);
+            var opts = new Options(testOptions);
             var args = new[] { "the", "fat", "cat", "sat", "on", "the", "mat" };
             opts.ParseCommandLine(args);
             var nonOptions = opts.NonOptions;
@@ -169,7 +170,7 @@ namespace ProgOpts2.Tests
         [TestMethod()]
         public void TryGetValueTest()
         {
-            var opts = new ProgOpts(testOptions);
+            var opts = new Options(testOptions);
             var args = new[] { "-f", "file1.cpp" };
             opts.ParseCommandLine(args);
 
@@ -189,13 +190,13 @@ namespace ProgOpts2.Tests
         [TestMethod()]
         public void TryMultiOptionTest()
         {
-            ProgOpts.OptionSpec[] testOptions = new ProgOpts.OptionSpec[] {
-                new ProgOpts.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
-                new ProgOpts.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
-                new ProgOpts.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1, MaxOccurs=255 },
+            Options.OptionSpec[] testOptions = new Options.OptionSpec[] {
+                new Options.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
+                new Options.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
+                new Options.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1, MaxOccurs=255 },
                 };
 
-            var opts = new ProgOpts(testOptions);
+            var opts = new Options(testOptions);
             var args = new[] { "-f", "file1.cpp", "-f", "file2.cpp", "-f", "file3.cpp" };
             opts.ParseCommandLine(args);
 
@@ -218,16 +219,18 @@ namespace ProgOpts2.Tests
             Assert.AreEqual("file3.cpp", str3);
         }
 
+
+        // several parameters for a single option - e.g. -f specifies a lis of files:
         [TestMethod()]
         public void MoreThanOneParamTest()
         {
-            ProgOpts.OptionSpec[] testOptions = new ProgOpts.OptionSpec[] {
-                new ProgOpts.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
-                new ProgOpts.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
-                new ProgOpts.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 3},
+            Options.OptionSpec[] testOptions = new Options.OptionSpec[] {
+                new Options.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
+                new Options.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
+                new Options.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 3},
                 };
 
-            var opts = new ProgOpts(testOptions);
+            var opts = new Options(testOptions);
             var args = new[] { "-f", "file1.cpp", "file2.cpp", "file3.cpp", "file4.cpp" };
             opts.ParseCommandLine(args);
 
@@ -249,7 +252,59 @@ namespace ProgOpts2.Tests
             Assert.AreEqual(4, nonOpts[0].index);
         }
 
+        /// <summary>
+        /// One good option (-f) and three illegal options (-eqy)
+        /// </summary>
+        [TestMethod]
+        public void IllegalSingleDashOptions()
+        {
+            Options.OptionSpec[] testOptions = new Options.OptionSpec[] {
+                new Options.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
+                new Options.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
+                new Options.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1},
+                };
 
+            var opts = new Options(testOptions);
+            var args = new[] { "-f", "file1.cpp", "-eqy"};
+            var result = opts.ParseCommandLine(args);
+            Assert.IsFalse(result);
+            var illegalOptions = opts.IllegalOptions;
+            Assert.AreEqual(illegalOptions.Length, 3);
+        }
+
+        /// <summary>
+        /// an option that can be specified more than once on the command line AND which takes more than one parameter for each occurrence
+        /// </summary>
+        [TestMethod]
+        public void MultiOptionMultiParam()
+        {
+            Options.OptionSpec[] testOptions = new Options.OptionSpec[] {
+                new Options.OptionSpec { ShortOption = 'l', LongOption = "ll", NumberOfParams = 2, MaxOccurs = 100 },
+                };
+
+            var opts = new Options(testOptions);
+
+            int occurrences = 10;
+            var rnd = new Random();
+            var pairs = Enumerable.Range(1, occurrences).Select(x => ($"{rnd.NextDouble() * 100:F3}", $"{rnd.NextDouble() * 100:F3}")).ToList();
+            var args = pairs.Select(x => new[] { "--ll", x.Item1, x.Item2 }).SelectMany(y => y).ToArray();
+
+            Debug.WriteLine(string.Join(" ", args));
+
+            var result = opts.ParseCommandLine(args);
+            Assert.IsTrue(result);
+            var illegalOptions = opts.IllegalOptions;
+            Assert.AreEqual(illegalOptions.Length, 0);
+
+            var llOptionCount = opts.OptionCount("ll");
+            Assert.AreEqual(llOptionCount, occurrences);
+            for (int i = 0; i < occurrences; i++)
+            {
+                var optResult = opts.TryGetList("ll", out var pair, i);
+                Assert.IsTrue(optResult);
+                Assert.AreEqual(pair[0], pairs[i].Item1, pairs[i].Item2);
+            }
+        }
 
 
         [Ignore]

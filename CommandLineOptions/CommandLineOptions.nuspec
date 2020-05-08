@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>Command Line Option Parser</title>
+    <authors>Adrian Sims</authors>
+    <owners>Adrian Sims</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>http://project_url_here_or_delete_this_line/</projectUrl>
+    <description>Command line parser for C# that does not use reflection</description>
+    <copyright>Copyright 2020</copyright>
+  </metadata>
+</package>

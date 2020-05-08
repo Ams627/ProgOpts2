@@ -62,17 +62,17 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="CommandLineOptionsTests.cs" />
     <Compile Include="PopListTests.cs" />
-    <Compile Include="ProgOptsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProgOpts2\ProgOpts2.csproj">
-      <Project>{B3D386CD-8FDC-4E99-B6FC-7FA7F62EA892}</Project>
-      <Name>ProgOpts2</Name>
+    <ProjectReference Include="..\CommandLineOptions\CommandLineOptions.csproj">
+      <Project>{ac58a810-eb34-4d73-a02b-6c1135562a80}</Project>
+      <Name>CommandLineOptions</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
