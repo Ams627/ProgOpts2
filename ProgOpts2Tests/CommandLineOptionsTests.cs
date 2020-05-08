@@ -274,6 +274,9 @@ namespace CommandLineOptions.Tests
 
         /// <summary>
         /// an option that can be specified more than once on the command line AND which takes more than one parameter for each occurrence
+        /// In this example, consider a --ll option that allows you to specify latitude and longitude but you must specify -ll for each latitude
+        /// longitude pair:
+        /// --ll 72.682 31.997 --ll 45.978 10.421 --ll 49.678 39.766 --ll 6.550 64.499 
         /// </summary>
         [TestMethod]
         public void MultiOptionMultiParam()
