@@ -421,7 +421,7 @@ namespace CommandLineOptions
             public string LongOption { get; set; }
             public int MaxOccurs { get; set; } = 1;
             public int NumberOfParams { get; set; } = 0;
-            public char ShortOption { get; set; }
+            public char ShortOption { get; set; } = '\0';
         }
 
         public class ParsedOption

@@ -1,8 +1,99 @@
-= Progopts
+:toc:
+:sectnums:
+:toclevels: 5
+:sectnumlevels: 5
+:showcomments:
+:xrefstyle: short
+:icons: font
+:source-highlighter: coderay
+:tick: &#x2714;
+:pound: &#xA3;
 
-List<Option> definedOptions;
+= Progopts2: A command line option parser that does not use reflection
 
-we form a lookup for char options and string options
+The aim of this project is to implement a simple parser which works with GNU-style options. This means options
+specified by a single character follow a single dash:
+
+----
+grep -E "Fred|Jim" names.txt
+----
+
+A group of single character options can be chained together in a single argument - the
+following examples both set the options `-i`, `-P` and `-o` and
+are exactly equivalent:
+
+----
+grep -iPo "\(Harry.+\)" names.txt
+grep -i -P -o names.txt
+----
+
+Option names can also be longer than one character in which case they need to be preceeded by a double-dash:
+
+----
+git push --force
+----
+
+In many cases, an option can be specified **either** by a single letter **or** by a longer name: the following are exactly equivalent:
+
+----
+git push -f
+git push --force
+----
+
+Option parsing is terminated if an argument that is only double-dash is reached. The following command would checkout 
+`file1.cpp` and a file called `--file2.cpp`.
+
+----
+git checkout -- file1.cpp --file2.cpp
+----
+
+== Keeping things simple
+
+There are many option parsing libraries, but the idea behind this one is to keep things simple. There is no automatic validation, no
+reflection and no direct handling of command verbs. However, options can be put into groups so that only certain options
+are valid under certain conditions.
+
+== Specifying valid options
+
+The class used to specify options has public properties as follows:
+
+[source,c#]
+----
+public class OptionSpec
+{
+    public object Group { get; set; }
+    public string LongOption { get; set; }
+    public int MaxOccurs { get; set; } = 1;
+    public int NumberOfParams { get; set; } = 0;
+    public char ShortOption { get; set; } = '\0';
+}
+----
+
+The option group can be set to `null` (the default) or it can be set to a group (use any type). The allowed groups
+can then be passed to the `ParseCommandLine` method. This allows similar processing to the that used in git: certain
+options are only permitted with certain verbs.
+
+`MaxOccurs` is typically left set to its default of 1, since we generally only want an option to occur once. However,
+we can change this. An example where this is useful is passing multiple input files with a `-i` option:
+
+
+----
+ffmpeg -i file1.mp4 -i file2.mp4
+----
+
+`NumberOfParams` specifies the number of parameters the option takes. A simple switch such as `-i` in `grep -i` takes no
+parameters. In `git commit -m` the `-m` option takes a single parameter: the commit message.
+
+In order to specify the entire set of valid options, we create an array of `OptionSpec` as follows:
+
+[source,c#]
+----
+private readonly Options.OptionSpec[] testOptions = new Options.OptionSpec[] {
+            new Options.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
+            new Options.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
+            new Options.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1 },
+        };
+----
 
 
 == How different shells process quotes

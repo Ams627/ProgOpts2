@@ -92,9 +92,9 @@ namespace CommandLineOptions.Tests
             Assert.IsTrue(opts.IsOptionPresent('f'));
             Assert.IsTrue(opts.IsOptionPresent("file"));
 
-            var filename = opts.GetParam<string>("file");
+            var filename = opts.GetParam("file");
             Assert.AreEqual(filename, "request.xml");
-            var filename2 = opts.GetParam<char>('f');
+            var filename2 = opts.GetParam('f');
             Assert.AreEqual(filename, "request.xml");
         }
 
