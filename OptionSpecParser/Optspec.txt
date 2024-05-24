@@ -1,0 +1,60 @@
+The text before the first heading 1 (heading 1 is marked by an equals character at the first place on the line) is a comment. 
+This text is never output, but can contain definitions such as .group (described below).
+
+When a command is run
+
+There are special options which are available for all commands. e.g. --verbose
+There are other options which are available only when there is no command specified. These are 
+defined with .group all and .group none which must be before the first heading 1. All lines that
+start with any amount of whitespace followed by a dash or two dashes are considered options and all
+belong to the group unless a dash appears on a line by itself.
+
+${group:subtree} adds the option group to the command.
+${subcommands:square} lists the immediate subcommands in square brackets
+${subcommands} lists the immediate subcommands without square brackets
+
+
+.group all								# applies to all commands
+	-N, --max-count=<count> #type=int,maxoccurs=1
+	-v, --verbose
+
+.group counting	
+	-N, --max-count=<count> #type=int,maxoccurs=1
+
+.group selection
+	-r, --revision=<revision> #type=re:[a-z0-9]+
+
+= git
+
+usage: git [option] [command] args
+where command is one of ${subcommands}
+
+	-v, --version           Show the version of git
+	-C <path>
+	-c <name>=<value>
+	--exec-path[=<path>]
+
+Use git help command to print help for a specific command
+
+== worktree
+# lines starting with a hash are comments and are ignored. All white space immediately following a heading is ignored.
+
+git worktree - manipulate a worktree
+
+usage: git worktree ${subcommands:square} <args>
+
+Manipulate a git worktree.
+
+Options are:
+		-c, --count
+
+
+=== add
+
+=== remove
+
+Remove a worktree
+
+Options are:
+		${group:worktree}
+		-f, --force		force a removal

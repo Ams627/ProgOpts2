@@ -4,7 +4,8 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="BuildNuget\BuildNuget.csproj" Type="Classic C#" />
-  <Project Path="CommandLineOptions\CommandLineOptions.csproj" />
+  <Project Path="BuildNuget\BuildNuget.csproj" />
   <Project Path="CommandLineOptionsTests\CommandLineOptionsTests.csproj" />
+  <Project Path="CommandLineOptions\CommandLineOptions.csproj" />
+  <Project Path="OptionSpecParser\OptionSpecParser.csproj" />
 </Solution>

@@ -1,6 +1,8 @@
 = Parse description text.
 
-Generate a group number for each heading add allowed options to it (including options defined in groups in header)
+Generate a group number for each heading add allowed options to it (including options defined in groups in header).
+
+We will need a class that, for a verb string returns help text.
 
 = Parsing the command line itself.
 

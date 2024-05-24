@@ -406,7 +406,7 @@ public class Options
                     // not enough args left as option parameters:
                     _illegalOptions.Add(($"{c}", index, ErrorCodes.OptionNotEnoughParams));
 
-                    // can't parse anthing else here so return false:
+                    // can't parse anything else here so return false:
                     return false;
                 }
                 else
