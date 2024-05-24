@@ -446,14 +446,7 @@ public class Options
 
         return true;
     }
-    public class OptionSpec
-    {
-        public object Group { get; set; }
-        public string LongOption { get; set; }
-        public int MaxOccurs { get; set; } = 1;
-        public int NumberOfParams { get; set; } = 0;
-        public char ShortOption { get; set; } = '\0';
-    }
+    public record OptionSpec(string LongOption, int MaxOccurs = 1, int NumberOfParams = 0, char ShortOption = '\0', object Group = null);
 
     public class ParsedOption
     {

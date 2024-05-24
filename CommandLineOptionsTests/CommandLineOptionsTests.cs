@@ -30,9 +30,9 @@ namespace CommandLineOptions.Tests
     public class CommandLineOptionsTests
     {
         private readonly Options.OptionSpec[] testOptions = new Options.OptionSpec[] {
-                    new Options.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
-                    new Options.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
-                    new Options.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1 },
+                    new Options.OptionSpec(ShortOption:'a', LongOption: "all"),
+                    new Options.OptionSpec(ShortOption:'i', LongOption: "ignorecase"),
+                    new Options.OptionSpec(ShortOption:'f', LongOption: "file", NumberOfParams : 1)
                 };
 
         [TestMethod()]
@@ -43,20 +43,20 @@ namespace CommandLineOptions.Tests
             // No exception
 
             Options.OptionSpec[] dupOptions1 = new Options.OptionSpec[] {
-                    new Options.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
-                    new Options.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
+                    new Options.OptionSpec(ShortOption:'a', LongOption : "all", NumberOfParams: 0 ),
+                    new Options.OptionSpec(ShortOption: 'i', LongOption : "ignorecase", NumberOfParams: 0 ),
                     // duplicate i:
-                    new Options.OptionSpec { ShortOption = 'i', LongOption = "input", NumberOfParams = 1 },
-                    new Options.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1 },
+                   new Options.OptionSpec(ShortOption: 'i', LongOption : "input", NumberOfParams: 1 ),
+                    new Options.OptionSpec(ShortOption: 'f', LongOption : "file", NumberOfParams: 1 ),
                 };
 
             Assert.ThrowsException<ArgumentException>(() => new Options(dupOptions1));
 
             Options.OptionSpec[] dupOptions2 = new Options.OptionSpec[] {
-                    new Options.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
-                    new Options.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
-                    new Options.OptionSpec { ShortOption = 'j', LongOption = "ignorecase", NumberOfParams = 1 },
-                    new Options.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1 },
+                    new Options.OptionSpec(ShortOption : 'a', LongOption : "all"),
+                    new Options.OptionSpec(ShortOption : 'i', LongOption : "ignorecase"),
+                    new Options.OptionSpec(ShortOption : 'j', LongOption : "ignorecase"),
+                    new Options.OptionSpec(ShortOption : 'f', LongOption : "file", NumberOfParams: 1)
                 };
 
             Assert.ThrowsException<ArgumentException>(() => new Options(dupOptions2));
@@ -212,9 +212,9 @@ namespace CommandLineOptions.Tests
         public void TryMultiOptionTest()
         {
             Options.OptionSpec[] testOptions = new Options.OptionSpec[] {
-                new Options.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
-                new Options.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
-                new Options.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1, MaxOccurs=255 },
+                new Options.OptionSpec(ShortOption: 'a', LongOption: "all"),
+                new Options.OptionSpec(ShortOption: 'i', LongOption: "ignorecase"),
+                new Options.OptionSpec(ShortOption: 'f', LongOption: "file", NumberOfParams: 1, MaxOccurs: 255),
                 };
 
             var opts = new Options(testOptions);
@@ -246,9 +246,9 @@ namespace CommandLineOptions.Tests
         public void MoreThanOneParamTest()
         {
             Options.OptionSpec[] testOptions = new Options.OptionSpec[] {
-                new Options.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
-                new Options.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
-                new Options.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 3},
+                new Options.OptionSpec(ShortOption: 'a', LongOption: "all"),
+                new Options.OptionSpec(ShortOption: 'i', LongOption: "ignorecase"),
+                new Options.OptionSpec(ShortOption: 'f', LongOption: "file", NumberOfParams: 3),
                 };
 
             var opts = new Options(testOptions);
@@ -280,9 +280,9 @@ namespace CommandLineOptions.Tests
         public void IllegalSingleDashOptions()
         {
             Options.OptionSpec[] testOptions = new Options.OptionSpec[] {
-                new Options.OptionSpec { ShortOption = 'a', LongOption = "all", NumberOfParams = 0 },
-                new Options.OptionSpec { ShortOption = 'i', LongOption = "ignorecase", NumberOfParams = 0 },
-                new Options.OptionSpec { ShortOption = 'f', LongOption = "file", NumberOfParams = 1},
+                new Options.OptionSpec (ShortOption: 'a', LongOption: "all"),
+                new Options.OptionSpec (ShortOption: 'i', LongOption: "ignorecase"),
+                new Options.OptionSpec (ShortOption: 'f', LongOption: "file", NumberOfParams: 1),
                 };
 
             var opts = new Options(testOptions);
@@ -303,7 +303,7 @@ namespace CommandLineOptions.Tests
         public void MultiOptionMultiParam()
         {
             Options.OptionSpec[] testOptions = new Options.OptionSpec[] {
-                new Options.OptionSpec { ShortOption = 'l', LongOption = "ll", NumberOfParams = 2, MaxOccurs = 100 },
+                new Options.OptionSpec(ShortOption: 'l', LongOption: "ll", NumberOfParams: 2, MaxOccurs: 100),
                 };
 
             var opts = new Options(testOptions);
@@ -329,7 +329,6 @@ namespace CommandLineOptions.Tests
                 Assert.AreEqual(pair[0], pairs[i].Item1, pairs[i].Item2);
             }
         }
-
 
         [Ignore]
         [TestMethod()]
