@@ -1,0 +1,15 @@
+= Parse description text.
+
+Generate a group number for each heading add allowed options to it (including options defined in groups in header)
+
+= Parsing the command line itself.
+
+* All verbs come first and together on the command line. It is NOT possible to have 
+
+    command verb option subverb
+    
+* Optional subverbs are not allowed. For example git worktree requires add, remove, list or move. This means
+  we can immediately report bad verbs without considering the possibility that they might be parameters.
+  
+* We use the verbs specified on the command line to descend the tree until we reach an integer. 
+    

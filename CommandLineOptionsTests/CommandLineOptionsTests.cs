@@ -18,6 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
@@ -67,16 +68,16 @@ namespace CommandLineOptions.Tests
             var opts = new Options(testOptions);
             var args = new[] { "--all", "-i", "-frequest.xml" };
             opts.ParseCommandLine(args);
-            Assert.IsTrue(opts.IsOptionPresent("ignorecase"));
-            Assert.IsTrue(opts.IsOptionPresent('i'));
-            Assert.IsTrue(opts.IsOptionPresent("all"));
-            Assert.IsTrue(opts.IsOptionPresent('a'));
-            Assert.IsTrue(opts.IsOptionPresent('f'));
-            Assert.IsTrue(opts.IsOptionPresent("file"));
-            Assert.IsFalse(opts.IsOptionPresent('z'));
-            Assert.IsFalse(opts.IsOptionPresent("zed"));
+            opts.IsOptionPresent("ignorecase").Should().BeTrue();
+            opts.IsOptionPresent('i').Should().BeTrue();
+            opts.IsOptionPresent("all").Should().BeTrue();
+            opts.IsOptionPresent('a').Should().BeTrue();
+            opts.IsOptionPresent('f').Should().BeTrue();
+            opts.IsOptionPresent("file").Should().BeTrue();
+            opts.IsOptionPresent('z').Should().BeFalse();
+            opts.IsOptionPresent("zed").Should().BeFalse();
             var filename = opts.GetParam<char>('f');
-            Assert.AreEqual(filename, "request.xml");
+            filename.Should().Be("request.xml");
         }
 
         [TestMethod()]
@@ -264,7 +265,7 @@ namespace CommandLineOptions.Tests
 
             var result = opts.TryGetList("file", out var strArray, 0);
             Assert.IsTrue(result);
-            string[] arr =  { "file1.cpp", "file2.cpp", "file3.cpp" };
+            string[] arr = { "file1.cpp", "file2.cpp", "file3.cpp" };
             CollectionAssert.AreEqual(arr, strArray);
             var nonOpts = opts.NonOptions;
             Assert.AreEqual(1, nonOpts.Length);
@@ -285,7 +286,7 @@ namespace CommandLineOptions.Tests
                 };
 
             var opts = new Options(testOptions);
-            var args = new[] { "-f", "file1.cpp", "-eqy"};
+            var args = new[] { "-f", "file1.cpp", "-eqy" };
             var result = opts.ParseCommandLine(args);
             Assert.IsFalse(result);
             var illegalOptions = opts.IllegalOptions;
@@ -319,7 +320,7 @@ namespace CommandLineOptions.Tests
             var illegalOptions = opts.IllegalOptions;
             Assert.AreEqual(illegalOptions.Length, 0);
 
-            var llOptionCount = opts.OptionCount("ll");
+            var llOptionCount = opts.GetOptionCount("ll");
             Assert.AreEqual(llOptionCount, occurrences);
             for (int i = 0; i < occurrences; i++)
             {

@@ -34,19 +34,19 @@ namespace CommandLineOptions
     {
         private readonly T[] _array;
         private int _remaining;
-        private readonly int _count;
+        private readonly int _originalCount;
 
         public PopQueue(T[] array, int offset = 0)
         {
             _array = array;
-            _count = array.Length - offset;
-            _remaining = _count;
+            _originalCount = array.Length - offset;
+            _remaining = _originalCount;
         }
 
         /// <summary>
         /// the ORIGINAL number of items in the queue - never changes after construction
         /// </summary>
-        public int Count => _count;
+        public int OriginalCount => _originalCount;
 
         /// <summary>
         /// The remaining number of items in the queue:
@@ -74,7 +74,7 @@ namespace CommandLineOptions
         /// </summary>
         public void Undo()
         {
-            if (_remaining == _count)
+            if (_remaining == _originalCount)
             {
                 throw new InvalidOperationException($"Cannot undo in poplist - the poplist is at its original fill level.");
             }

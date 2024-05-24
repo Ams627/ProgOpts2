@@ -2,19 +2,20 @@
 using System;
 using System.Linq;
 
+
 namespace CommandLineOptions.Tests
 {
     [TestClass()]
-    public class PopListTests
+    public class PopQueueTests
     {
         [TestMethod()]
-        public void PopListTest()
+        public void PopQueueTest()
         {
             var args = new[] { "the", "fat", "cat", "sat", "on", "the", "mat" };
             var popList = new PopQueue<string>(args);
-            Assert.AreEqual(args.Length, popList.Count);
+            Assert.AreEqual(args.Length, popList.OriginalCount);
             var popList2 = new PopQueue<string>(args, 2);
-            Assert.AreEqual(args.Length - 2, popList2.Count);
+            Assert.AreEqual(args.Length - 2, popList2.OriginalCount);
         }
 
         [TestMethod()]
@@ -22,7 +23,7 @@ namespace CommandLineOptions.Tests
         {
             var args = new[] { "the", "fat", "cat", "sat", "on", "the", "mat" };
             var popList = new PopQueue<string>(args);
-            Assert.AreEqual(args.Length, popList.Count);
+            Assert.AreEqual(args.Length, popList.OriginalCount);
             var pop1 = popList.PopFront();
             var pop2 = popList.PopFront();
             Assert.AreEqual(("the", 0), pop1);
@@ -39,7 +40,7 @@ namespace CommandLineOptions.Tests
         {
             var args = new[] { "the", "fat", "cat", "sat", "on", "the", "mat" };
             var popList = new PopQueue<string>(args);
-            Assert.AreEqual(args.Length, popList.Count);
+            Assert.AreEqual(args.Length, popList.OriginalCount);
             var pop1 = popList.PopFront();
             var pop2 = popList.PopFront();
             Assert.AreEqual(("the", 0), pop1);

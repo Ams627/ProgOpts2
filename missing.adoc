@@ -1,0 +1,4 @@
+When are options valid. Many verbs will take a maxcount option, but not all.
+
+For example in the tcutil example, list will take maxcount but build will not.
+

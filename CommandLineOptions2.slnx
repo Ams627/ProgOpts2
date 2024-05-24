@@ -1,0 +1,10 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="BuildNuget\BuildNuget.csproj" Type="Classic C#" />
+  <Project Path="CommandLineOptions\CommandLineOptions.csproj" />
+  <Project Path="CommandLineOptionsTests\CommandLineOptionsTests.csproj" />
+</Solution>

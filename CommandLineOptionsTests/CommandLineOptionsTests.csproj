@@ -7,7 +7,4 @@
   <ItemGroup>
     <ProjectReference Include="..\CommandLineOptions\CommandLineOptions.csproj" />
   </ItemGroup>
-  <PropertyGroup>
-    <PostBuildEvent>$(ProjectDir)\buildnuget.ps1</PostBuildEvent>
-  </PropertyGroup>
 </Project>
