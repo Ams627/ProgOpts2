@@ -4,6 +4,8 @@ Generate a group number for each heading add allowed options to it (including op
 
 We will need a class that, for a verb string returns help text.
 
+e.g. GetCommandInfo(params string[] verbs);
+
 = Parsing the command line itself.
 
 * All verbs come first and together on the command line. It is NOT possible to have 
